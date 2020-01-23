@@ -8,9 +8,9 @@ class ParsingRenderer(mistune.Renderer):
     def __init__(self, **kwargs):
         super(ParsingRenderer, self).__init__(**kwargs)
         self.blocks = []
-        self.headlines = u''
-        self.doubleemphasiswords = u''
-        self.emphasiswords = u''
+        self.headlines = ''
+        self.doubleemphasiswords = ''
+        self.emphasiswords = ''
 
     def block_code(self, code, lang):
         self.blocks.append(code)
@@ -32,17 +32,17 @@ class ParsingRenderer(mistune.Renderer):
 class MarkdownParser:
     def __init__(self):
         self.blocks = []
-        self.headlines = u''
-        self.tags = u''
-        self.doubleemphasiswords = u''
-        self.emphasiswords = u''
+        self.headlines = ''
+        self.tags = ''
+        self.doubleemphasiswords = ''
+        self.emphasiswords = ''
 
     def parse(self, markdown_text, config):
         renderer = ParsingRenderer()
         markdown = mistune.Markdown(renderer=renderer)
         markdown(markdown_text)
         self.blocks = renderer.blocks
-        self.headlines = renderer.headlines if renderer.headlines.strip() else u''
+        self.headlines = renderer.headlines if renderer.headlines.strip() else ''
         self.tags = self.get_tags_line(markdown_text, config)
 
     def get_tags_line(self, markdown_text, config):
@@ -50,7 +50,7 @@ class MarkdownParser:
         tags_regex = config["TAGS_REGEX"]
         tags_to_ignore = config["TAGS_TO_IGNORE"]
         if len(markdown_text):
-            tags_line = u''
+            tags_line = ''
             if tags_prefix:
                 # find tags line
                 for l in markdown_text.split("\n"):
@@ -66,7 +66,7 @@ class MarkdownParser:
             pattern = re.compile(tags_regex, re.UNICODE)
             tags = set(pattern.findall(tags_line))
             if tags:
-                return u" ".join([t for t in tags if t not in tags_to_ignore])
+                return " ".join([t for t in tags if t not in tags_to_ignore])
                 # Only choose nouns
                 # filtered_tags = []
                 # tagged_tags = pos_tag(tags_line.split())
@@ -77,4 +77,4 @@ class MarkdownParser:
                 #                 filtered_tags.append(t)
                 #                 break
                 # return u" ".join([t for t in filtered_tags])
-        return u''
+        return ''
