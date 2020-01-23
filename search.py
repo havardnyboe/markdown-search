@@ -72,11 +72,11 @@ class Search:
             self.ix = index.open_dir(index_folder)
 
     def add_document(self, writer, file_path, config):
-        file_name = str(file_path.replace(".", " ").replace("/", " ").replace("\\", " ").replace("_", " ").replace("-", " "), encoding="utf-8")
+        file_name = str(file_path.replace(".", " ").replace("/", " ").replace("\\", " ").replace("_", " ").replace("-", " "))
         # read file content
         with codecs.open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-            path = str(file_path, "utf-8")
+            path = str(file_path)
 
         # parse markdown fields
         parser = MarkdownParser()
@@ -223,7 +223,6 @@ class Search:
             key_terms = results.key_terms("tags", docs=100, numterms=100)
             tag_cloud = [keyword for keyword, score in key_terms]
             search_result = self.create_search_result(results)
-
         return parsed_query, search_result, tag_cloud
 
     def get_document_total_count(self):
