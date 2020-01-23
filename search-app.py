@@ -53,7 +53,6 @@ def search():
 
     total = search.get_document_total_count()
     tag_cloud = [str(x).replace('b\'','').strip('\'') for x in tag_cloud]
-    print(tag_cloud)
     return render_template('search.html', entries=result, query=query, parsed_query=parsed_query, fields=fields, tag_cloud=tag_cloud, last_searches=get_last_searches(), directories=directories, total=total)
 
 @app.route('/open')
