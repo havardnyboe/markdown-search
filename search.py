@@ -9,7 +9,7 @@ import os
 import os.path
 import codecs
 from whoosh.qparser import MultifieldParser, QueryParser
-from whoosh.analysis import StemmingAnalyzer
+from jieba.analyse import ChineseAnalyzer
 
 class SearchResult:
     score = 1.0
@@ -54,7 +54,7 @@ class Search:
             os.mkdir(index_folder)
 
         exists = index.exists_in(index_folder)
-        stemming_analyzer = StemmingAnalyzer()
+        chinese_analyzer = ChineseAnalyzer()
 
         schema = Schema(
             path=ID(stored=True, unique=True)
@@ -63,7 +63,7 @@ class Search:
             , headlines=KEYWORD(stored=True, scorable=True, field_boost=60.0)
             , doubleemphasiswords=KEYWORD(stored=True, scorable=True, field_boost=40.0)
             , emphasiswords=KEYWORD(stored=True, scorable=True, field_boost=20.0)
-            , content=TEXT(stored=True, analyzer=stemming_analyzer)
+            , content=TEXT(stored=True, analyzer=chinese_analyzer)
             , time=STORED
         )
         if not exists:
