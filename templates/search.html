@@ -1,73 +1,113 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1><a href="{{ url_for('search')}}?query=&fields=">Search directory: {{ config.MARKDOWN_FILES_DIR }}</a></h1>
-<a class="index" href="{{ url_for('update_index')}}">[update index]</a>
-<a class="index" href="{{ url_for('update_index')}}?rebuild=True">[rebuild index]</a>
-<form action="{{ url_for('search') }}" name="search">
-    <input type="text" name="query" value="{{ query }}">
-    <input type="submit" value="search">
-    {% if config['USE_TAGS'] %}
-        {% if fields == "tags" %}
-            <input type="checkbox" checked name="fields" value="tags"/>{% else %}<input type="checkbox" name="fields" value="tags"/>
-        {%endif%}
-        <span class="label">only tags</span>
-        {% if fields == "filename" %}
-            <input type="checkbox" checked name="fields" value="filename"/>{% else %}<input type="checkbox" name="fields" value="filename"/>
-        {%endif%}
-        <span class="label">only file names</span>
-    {%endif%}
-    <a href="{{ url_for('search')}}?query=&fields=">[clear]</a>
-</form>
-<table cellspacing="3">
-    {% if tag_cloud and config['USE_TAGS'] %}
-    <tr>
-        <td class="tag-cloud">Related tags:&nbsp
-            {% for t in tag_cloud%}
-                <a href="{{url_for('search')}}?query={{t}}&fields=tags">{{t}}</a>
-            {% endfor %}
-        </td>
-    </tr>
+<div class="container">
+
+    <h1 class="my-3">本地 Markdown 搜索工具</h1>
+
+    <form action="{{ url_for('search') }}" name="search">
+        <div class="row">
+            <div class="col-9">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">🔍</div>
+                    </div>
+                    <input type="text" name="query" value="{{ query }}" class="form-control">
+                    <div class="input-group-append">
+                        {% if config['USE_TAGS'] %}
+                        <div class="input-group-text">
+                            {% if fields == "tags" %}
+                            <input type="checkbox" checked name="fields" value="tags" />
+                            {% else %}
+                            <input type="checkbox" name="fields" value="tags" />
+                            {%endif%}
+                            <span class="form-check-label">&nbsp;只匹配标签</span>
+                        </div>
+                        <div class="input-group-text">
+                            {% if fields == "filename" %}
+                            <input type="checkbox" checked name="fields" value="filename" />
+                            {% else %}
+                            <input type="checkbox" name="fields" value="filename" />
+                            {% endif %}
+                            <span class="form-check-label">&nbsp;只匹配文件名</span>
+                        </div>
+                        {%endif%}
+                        <input type="submit" value="搜索" class="btn btn-primary">
+                        <a class="btn btn-secondary" href="{{ url_for('search')}}?query=&fields=">清空</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="btn-group float-right" role="group">
+                    <a class="btn btn-outline-primary" href="{{ url_for('update_index')}}">更新索引</a>
+                    <a class="btn btn-outline-danger" href="{{ url_for('update_index')}}?rebuild=True">重建索引</a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <ul>
+        {% if tag_cloud and config['USE_TAGS'] %}
+        <li class="tag-cloud">关联标签：&nbsp
+                {% for t in tag_cloud%}
+                <a href="{{url_for('search')}}?query={{t}}&fields=tags"><span class="badge badge-primary">{{t}}</span></a>
+                {% endfor %}
+        </li>
+        {% endif %}
+        {% if directories %}
+        <li class="directories-cloud">文件目录：&nbsp
+                {% for d in directories %}
+                <a href="{{url_for('search')}}?query={{d|trim}}&fields=filename"><span class="badge badge-secondary">{{d|trim}}</span></a>
+                {% endfor %}
+        </li>
+        {% endif %}
+        {% if config['SHOW_PARSED_QUERY'] %}
+        <li class="info">搜索目录：<code>{{ config.MARKDOWN_FILES_DIR }}</code></li>
+        {% if parsed_query != "" %}
+        <li class="info">请求解析结果：<code>{{ parsed_query }}</code></li>
+        {% endif %}
+        {% endif %}
+    </ul>
+
+    {% if parsed_query != "" %}
+    {% if entries != [] %}
+    <div class="alert alert-primary">
+        在 {{ total }} 个文件中共找到了 {{ entries | length }} 个结果。
+    </div>
+    {% else %}
+    <div class="alert alert-danger">
+        没有匹配的结果，请更换关键词重试。
+    </div>
     {% endif %}
-    {% if directories %}
-    <tr>
-        <td class="directories-cloud">File directories:&nbsp
-            {% for d in directories %}
-                <a href="{{url_for('search')}}?query={{d|trim}}&fields=filename">{{d|trim}}</a>
-            {% endfor %}
-        </td>
-    </tr>
     {% endif %}
-    {% if config['SHOW_PARSED_QUERY']%}
-    <tr>
-        <td class="info">Parsed query: {{ parsed_query }}</td>
-    </tr>
-    {% endif %}
-    <tr>
-        <td class="info">FOUND {{ entries | length }} results of {{ total}} documents</td>
-    </tr>
 
     {% for e in entries %}
-    <tr>
-        <td class="search-result">
-            {% if config['USE_TAGS'] %}
-            <div class="tags">
-                {% for tag in e.tags.split()%}
-                <a href="{{url_for('search')}}?query={{tag}}&fields=tags">{{tag}}</a>
-                {% endfor%}
-            </div>
-            {% endif%}
-            <div class="path"><a href='{{ url_for("open_file")}}?path={{e.path|urlencode}}&query={{query}}&fields={{fields}}'>{{e.path}}</a>score: {{'%d'  % e.score}}</div>
-            <div class="markdown-body">{{ e.content_highlight|safe}}</div>
-        </td>
-    </tr>
+    <div class="search-result card my-2">
+        <div class="card-body">
+            <h5 class="card-title"><a href='{{ url_for("open_file")}}?path={{e.path|urlencode}}&query={{query}}&fields={{fields}}'>{{e.path}}</a></h5>
+            <h6 class="card-subtitle mb-1">
+                <span class="badge badge-success">{{'%d'  % e.score}} 分</span>
+                {% if config['USE_TAGS'] %}
+                    {% for tag in e.tags.split()%}
+                    <a href="{{url_for('search')}}?query={{tag}}&fields=tags"><span class="badge badge-primary">{{tag}}</a></span>
+                    {% endfor%}
+                {% endif %}
+            </h6>
+            <div class="markdown-body"><blockquote>{{ e.content_highlight|safe}}</blockquote></div>
+        </div>
+    </div>
     {% endfor %}
-</table>
-<div class="last-searches">Last searches: <br/>
-    {% for s in last_searches %}
-        <span><a href="{{url_for('search')}}?{{s}}">{{s}}</a></span>
-    {% endfor %}
+
+    <div class="last-searches">最近的搜索请求：<br />
+        {% for s in last_searches %}
+        <a href="{{url_for('search')}}?{{s}}"><span class="badge badge-secondary">{{s}}</span></a>
+        {% endfor %}
+    </div>
+    <hr>
+    <p>
+        更多信息，请检查本项目的 <a href="https://github.com/xjtu-blacksmith/markdown-search">README.md 文件</a>
+    </p>
+    <p>
+        Forked from: <a href="https://github.com/BernhardWenzel/markdown-search">BernhardWenzel/markdown-search</a>
+    </p>
 </div>
-<p>
-    More info can be found in the <a href="https://github.com/BernhardWenzel/markdown-search">README.md file</a>
-</p>
 {% endblock %}

@@ -58,7 +58,7 @@ class Search:
 
         schema = Schema(
             path=ID(stored=True, unique=True)
-            , filename=TEXT(stored=True, field_boost=100.0)
+            , filename=TEXT(stored=True, field_boost=100.0, analyzer=chinese_analyzer)
             , tags=KEYWORD(stored=True, scorable=True, field_boost=80.0)
             , headlines=KEYWORD(stored=True, scorable=True, field_boost=60.0)
             , doubleemphasiswords=KEYWORD(stored=True, scorable=True, field_boost=40.0)
