@@ -81,9 +81,9 @@
     {% endif %}
 
     {% for e in entries %}
-    <div class="search-result card my-2">
+    <div class="search-result card my-3 border-primary">
         <div class="card-body">
-            <h5 class="card-title"><a href='{{ url_for("open_file")}}?path={{e.path|urlencode}}&query={{query}}&fields={{fields}}'>{{e.path}}</a></h5>
+            <h5 class="card-title"><a href='{{ url_for("open_file")}}?path={{e.path|urlencode}}&query={{query}}&fields={{fields}}'>{{e.path|replace(config.MARKDOWN_FILES_DIR + "/", "")|replace("/", " ➡️ ")}}</a></h5>
             <h6 class="card-subtitle mb-1">
                 <span class="badge badge-success">{{'%d'  % e.score}} 分</span>
                 {% if config['USE_TAGS'] %}
@@ -92,7 +92,7 @@
                     {% endfor%}
                 {% endif %}
             </h6>
-            <div class="markdown-body"><blockquote>{{ e.content_highlight|safe}}</blockquote></div>
+            <div class="markdown-body border rounded mt-2 p-3">{{ e.content_highlight|safe}}</div>
         </div>
     </div>
     {% endfor %}

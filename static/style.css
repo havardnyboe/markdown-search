@@ -1,20 +1,4 @@
-b.term0 {
-    background-color: #fdff01;
-    padding: 3px;
-}
-b.term1 {
-    background-color: #feff94;
-    padding: 2px;
-}
-b.term2 {
-    background-color: #f7ffda;
-    padding: 1px;
-}
-b.term3 {
-    background-color: #faffe5;
-    padding: 1px;
-}
-b.term4 {
-    background-color: #faffdd;
-    padding: 1px;
+mark {
+    background-color: #fff2ac;
+    background-image: linear-gradient(to right, #ffe359 0%, #fff2ac 100%);
 }

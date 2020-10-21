@@ -5,6 +5,7 @@ from markdown_parser import MarkdownParser
 import mistune
 from whoosh.fields import *
 import whoosh.index as index
+import whoosh.highlight as hl
 import os
 import os.path
 import codecs
@@ -173,6 +174,9 @@ class Search:
 
         # Show more context before and after
         results.fragmenter.surround = 50
+
+        # Set result formatter
+        results.formatter = hl.HtmlFormatter(tagname="mark")
 
         search_results = []
         for r in results:
