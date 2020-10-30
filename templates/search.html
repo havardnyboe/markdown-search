@@ -68,6 +68,10 @@
         {% endif %}
     </ul>
 
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">{{ message }}</div>
+    {% endfor %}
+
     {% if parsed_query != "" %}
     {% if entries != [] %}
     <div class="alert alert-primary">
