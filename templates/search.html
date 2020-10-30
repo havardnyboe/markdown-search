@@ -87,7 +87,7 @@
     {% for e in entries %}
     <div class="search-result card my-3 border-primary">
         <div class="card-body">
-            <h5 class="card-title"><a href='{{ url_for("open_file")}}?path={{e.path|urlencode}}&query={{query}}&fields={{fields}}'>{{e.path|replace(config.MARKDOWN_FILES_DIR + "/", "")|replace("/", " ➡️ ")}}</a></h5>
+            <h5 class="card-title"><a href='{{ url_for("open_file")}}?path={{e.path|urlencode}}&query={{query}}&fields={{fields}}'>{{e.path|replace(config.MARKDOWN_FILES_DIR + config.PATH_SEPERATOR, "")|replace(config.PATH_SEPERATOR, " ➡️ ")}}</a></h5>
             <h6 class="card-subtitle mb-1">
                 <span class="badge badge-success">{{'%d'  % e.score}} 分</span>
                 {% if config['USE_TAGS'] %}

@@ -59,7 +59,7 @@ class Search:
 
         schema = Schema(
             path=ID(stored=True, unique=True)
-            , filename=TEXT(stored=True, field_boost=100.0, analyzer=chinese_analyzer)
+            , filename=TEXT(stored=True, field_boost=100.0)
             , tags=KEYWORD(stored=True, scorable=True, field_boost=80.0)
             , headlines=KEYWORD(stored=True, scorable=True, field_boost=60.0)
             , doubleemphasiswords=KEYWORD(stored=True, scorable=True, field_boost=40.0)
@@ -187,7 +187,7 @@ class Search:
             sr.content = r["content"]
             highlights = r.highlights("content")
             if not highlights:
-                highlights = self.cap(r["content"], 1000)
+                highlights = self.cap(r["content"], 500)
             # unescape
             highlights = self.html_parser.unescape(highlights)
             html = self.markdown(highlights)

@@ -1,6 +1,9 @@
 # Path to markdown files
 MARKDOWN_FILES_DIR = "/home/user/wiki"
 
+# path sepearator under your OS
+PATH_SEPERATOR = '/'
+
 # Location of index file
 INDEX_DIR = "search_index"
 
