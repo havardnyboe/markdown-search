@@ -1,5 +1,5 @@
 # Path to markdown files
-MARKDOWN_FILES_DIR = "/home/user/wiki"
+MARKDOWN_FILES_DIR = "../../markdown-search/oppgaver"
 
 # path sepearator under your OS
 PATH_SEPERATOR = '/'
@@ -8,7 +8,7 @@ PATH_SEPERATOR = '/'
 INDEX_DIR = "search_index"
 
 # Command to use when clicking on filepath in search results
-EDIT_COMMAND = "edit"
+EDIT_COMMAND = "open"
 
 # Toggle to show Whoosh parsed query
 SHOW_PARSED_QUERY=True
@@ -17,7 +17,7 @@ SHOW_PARSED_QUERY=True
 USE_TAGS=True
 
 # Optional prefix in a markdown file, e.g. "tags: python search markdown tutorial"
-TAGS_PREFIX=""
+TAGS_PREFIX="tags: "
 
 # List of tags that should be ignored
 TAGS_TO_IGNORE = "and are what how its not with the"
