@@ -2,7 +2,7 @@
 {% block body %}
 <div class="container">
 
-    <h1 class="my-3">本地 Markdown 搜索工具</h1>
+    <h1 class="my-3">Markdown search</h1>
 
     <form action="{{ url_for('search') }}" name="search">
         <div class="row">
@@ -20,7 +20,7 @@
                             {% else %}
                             <input type="checkbox" name="fields" value="tags" />
                             {%endif%}
-                            <span class="form-check-label">&nbsp;只匹配标签</span>
+                            <span class="form-check-label">&nbsp;match tags</span>
                         </div>
                         <div class="input-group-text">
                             {% if fields == "filename" %}
@@ -28,18 +28,18 @@
                             {% else %}
                             <input type="checkbox" name="fields" value="filename" />
                             {% endif %}
-                            <span class="form-check-label">&nbsp;只匹配文件名</span>
+                            <span class="form-check-label">&nbsp;match filenames</span>
                         </div>
                         {%endif%}
-                        <input type="submit" value="搜索" class="btn btn-primary">
-                        <a class="btn btn-secondary" href="{{ url_for('search')}}?query=&fields=">清空</a>
+                        <input type="submit" value="search" class="btn btn-primary">
+                        <a class="btn btn-secondary" href="{{ url_for('search')}}?query=&fields=">clear</a>
                     </div>
                 </div>
             </div>
             <div class="col-3">
                 <div class="btn-group float-right" role="group">
-                    <a class="btn btn-outline-primary" href="{{ url_for('update_index')}}">更新索引</a>
-                    <a class="btn btn-outline-danger" href="{{ url_for('update_index')}}?rebuild=True">重建索引</a>
+                    <a class="btn btn-outline-primary" href="{{ url_for('update_index')}}">update index</a>
+                    <a class="btn btn-outline-danger" href="{{ url_for('update_index')}}?rebuild=True">rebuild index</a>
                 </div>
             </div>
         </div>
@@ -47,23 +47,23 @@
 
     <ul>
         {% if tag_cloud and config['USE_TAGS'] %}
-        <li class="tag-cloud">关联标签：&nbsp
+        <li class="tag-cloud">Associated tags:
                 {% for t in tag_cloud%}
                 <a href="{{url_for('search')}}?query={{t}}&fields=tags"><span class="badge badge-primary">{{t}}</span></a>
                 {% endfor %}
         </li>
         {% endif %}
         {% if directories %}
-        <li class="directories-cloud">文件目录：&nbsp
+        <li class="directories-cloud">File Directory:
                 {% for d in directories %}
                 <a href="{{url_for('search')}}?query={{d|trim}}&fields=filename"><span class="badge badge-secondary">{{d|trim}}</span></a>
                 {% endfor %}
         </li>
         {% endif %}
         {% if config['SHOW_PARSED_QUERY'] %}
-        <li class="info">搜索目录：<code>{{ config.MARKDOWN_FILES_DIR }}</code></li>
+        <li class="info">Searching the directory: <code>{{ config.MARKDOWN_FILES_DIR }}</code></li>
         {% if parsed_query != "" %}
-        <li class="info">请求解析结果：<code>{{ parsed_query }}</code></li>
+        <li class="info">Request parsing result: <code>{{ parsed_query }}</code></li>
         {% endif %}
         {% endif %}
     </ul>
@@ -75,11 +75,11 @@
     {% if parsed_query != "" %}
     {% if entries != [] %}
     <div class="alert alert-primary">
-        在 {{ total }} 个文件中共找到了 {{ entries | length }} 个结果。
+        Of {{ total }} existing files, {{ entries | length }} results were found.
     </div>
     {% else %}
     <div class="alert alert-danger">
-        没有匹配的结果，请更换关键词重试。
+        No matching results, please try again with another keyword.
     </div>
     {% endif %}
     {% endif %}
@@ -89,7 +89,7 @@
         <div class="card-body">
             <h5 class="card-title"><a href='{{ url_for("open_file")}}?path={{e.path|urlencode}}&query={{query}}&fields={{fields}}'>{{e.path|replace(config.MARKDOWN_FILES_DIR + config.PATH_SEPERATOR, "")|replace(config.PATH_SEPERATOR, " ➡️ ")}}</a></h5>
             <h6 class="card-subtitle mb-1">
-                <span class="badge badge-success">{{'%d'  % e.score}} 分</span>
+                <span class="badge badge-success">score: {{'%d'  % e.score}}</span>
                 {% if config['USE_TAGS'] %}
                     {% for tag in e.tags.split()%}
                     <a href="{{url_for('search')}}?query={{tag}}&fields=tags"><span class="badge badge-primary">{{tag}}</a></span>
@@ -101,17 +101,17 @@
     </div>
     {% endfor %}
 
-    <div class="last-searches">最近的搜索请求：<br />
+    <div class="last-searches">Recent search requests:<br />
         {% for s in last_searches %}
         <a href="{{url_for('search')}}?{{s}}"><span class="badge badge-secondary">{{s}}</span></a>
         {% endfor %}
     </div>
     <hr>
     <p>
-        更多信息，请检查本项目的 <a href="https://github.com/xjtu-blacksmith/markdown-search">README.md 文件</a>
+        For more information, please check this project's <a href="https://github.com/xjtu-blacksmith/markdown-search">README.md</a>
     </p>
     <p>
-        Forked from: <a href="https://github.com/BernhardWenzel/markdown-search">BernhardWenzel/markdown-search</a>
+        Forked from: <a href="https://github.com/xjtu-blacksmith/markdown-search">BernhardWenzel/markdown-search</a>
     </p>
 </div>
 {% endblock %}
