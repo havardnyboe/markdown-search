@@ -1,6 +1,9 @@
 *.pyc
-config.py
 out/
+bin/
+lib/
+__pycache__/
+pyvenv.cfg
 search_index/
 venv/
 *.iml
