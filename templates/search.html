@@ -2,7 +2,7 @@
 {% block body %}
 <div class="container">
 
-    <h1 class="my-3">Markdown search</h1>
+    <h1 class="my-3"><a href="search?query=&fields=">Markdown Search</a></h1>
 
     <form action="{{ url_for('search') }}" name="search">
         <div class="row">
@@ -48,16 +48,17 @@
     <ul>
         {% if tag_cloud and config['USE_TAGS'] %}
         <li class="tag-cloud">Associated tags:
-                {% for t in tag_cloud%}
-                <a href="{{url_for('search')}}?query={{t}}&fields=tags"><span class="badge badge-primary">{{t}}</span></a>
-                {% endfor %}
+            {% for t in tag_cloud%}
+            <a href="{{url_for('search')}}?query={{t}}&fields=tags"><span class="badge badge-primary">{{t}}</span></a>
+            {% endfor %}
         </li>
         {% endif %}
         {% if directories %}
         <li class="directories-cloud">File Directory:
-                {% for d in directories %}
-                <a href="{{url_for('search')}}?query={{d|trim}}&fields=filename"><span class="badge badge-secondary">{{d|trim}}</span></a>
-                {% endfor %}
+            {% for d in directories %}
+            <a href="{{url_for('search')}}?query={{d|trim}}&fields=filename"><span
+                    class="badge badge-secondary">{{d|trim}}</span></a>
+            {% endfor %}
         </li>
         {% endif %}
         {% if config['SHOW_PARSED_QUERY'] %}
@@ -87,13 +88,16 @@
     {% for e in entries %}
     <div class="search-result card my-3 border-primary">
         <div class="card-body">
-            <h5 class="card-title"><a href='{{ url_for("open_file")}}?path={{e.path|urlencode}}&query={{query}}&fields={{fields}}'>{{e.path|replace(config.MARKDOWN_FILES_DIR + config.PATH_SEPERATOR, "")|replace(config.PATH_SEPERATOR, " ➡️ ")}}</a></h5>
+            <h5 class="card-title"><a
+                    href='{{ url_for("open_file")}}?path={{e.path|urlencode}}&query={{query}}&fields={{fields}}'>{{e.path|replace(config.MARKDOWN_FILES_DIR
+                    + config.PATH_SEPERATOR, "")|replace(config.PATH_SEPERATOR, " ➡️ ")}}</a></h5>
             <h6 class="card-subtitle mb-1">
-                <span class="badge badge-success">score: {{'%d'  % e.score}}</span>
+                <span class="badge badge-success">score: {{'%d' % e.score}}</span>
                 {% if config['USE_TAGS'] %}
-                    {% for tag in e.tags.split()%}
-                    <a href="{{url_for('search')}}?query={{tag}}&fields=tags"><span class="badge badge-primary">{{tag}}</a></span>
-                    {% endfor%}
+                {% for tag in e.tags.split()%}
+                <a href="{{url_for('search')}}?query={{tag}}&fields=tags"><span
+                        class="badge badge-primary">{{tag}}</a></span>
+                {% endfor%}
                 {% endif %}
             </h6>
             <div class="markdown-body border rounded mt-2 p-3">{{ e.content_highlight|safe}}</div>
@@ -108,7 +112,8 @@
     </div>
     <hr>
     <p>
-        For more information, please check this project's <a href="https://github.com/xjtu-blacksmith/markdown-search">README.md</a>
+        For more information, please check this project's <a
+            href="https://github.com/xjtu-blacksmith/markdown-search">README.md</a>
     </p>
     <p>
         Forked from: <a href="https://github.com/xjtu-blacksmith/markdown-search">BernhardWenzel/markdown-search</a>
