@@ -2,3 +2,11 @@ mark {
     background-color: #fff2ac;
     background-image: linear-gradient(to right, #ffe359 0%, #fff2ac 100%);
 }
+
+h1 a {
+    color: #0069d9;
+}
+
+h1 a:hover {
+    text-decoration: none;
+}
